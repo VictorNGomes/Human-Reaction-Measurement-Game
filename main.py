@@ -56,12 +56,21 @@ class Game:
     def vefifica_acerto(self,tecla):
         pass
 
-    def end_game(self):
+    def tela_end_game(self):
         fonte = pygame.font.SysFont('arial',10,True)
-        mensagem = f"Acertos: {self.hits}\nErro:{self.miss}\nTempo médio de reação : {len(self.reaction_times)/sum(self.reaction_times)}"
 
-        msg_formatado = fonte.render(mensagem,True,(0,0,0))
-        self.tela.blit(msg_formatado,(400,300))
+        mensagem1 = f"Acertos: {self.hits}\nErro:{self.miss}\nTempo médio de reação : {len(self.reaction_times)/sum(self.reaction_times)}"
+        msg_formatado = fonte.render(mensagem1,True,(0,0,0))
+        self.tela.blit(msg_formatado,((self.largura//2) - 150, 150))
+
+        y_offset = 12
+        
+        for i, reaction_time in enumerate(self.reaction_times):
+            texto_tempo = fonte.render(f"Rodada {i + 1}: {reaction_time:.2f} ms", True, (0, 0, 0))
+            self.tela.blit(texto_tempo, (self.largura // 2 - 150, self.altura // 4 + y_offset))
+            y_offset += 12
+
+
     
     def start_round(self):
 
@@ -127,7 +136,7 @@ class Game:
                     print(f"acertos: {self.hits}  erros: {self.miss}\nTempo Reacao:{self.reaction_time }")
 
                 self.tela.fill(Game.WHITE)
-                self.end_game()
+                self.tela_end_game()
                 pygame.display.update()
 
 
