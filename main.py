@@ -16,13 +16,15 @@ class Quadrado:
         
 
 class Game:
-    rodada = 0
+
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
     GREEN = (0, 255, 0)
     BLUE = (0, 0, 255)
-    N_RODADAS = 10
 
+    N_RODADAS = 10
+    
+    rodada = 0
     cores = [RED,GREEN,BLUE]
 
     tempos_reacao =[]
@@ -51,6 +53,16 @@ class Game:
 
         return Quadrado(cor=cor,pos_x=x,pos_y=y)
     
+    def vefifica_acerto(self,tecla):
+        pass
+
+    def end_game(self):
+        fonte = pygame.font.SysFont('arial',10,True)
+        mensagem = f"Acertos: {self.hits}\nErro:{self.miss}\nTempo médio de reação : {len(self.reaction_times)/sum(self.reaction_times)}"
+
+        msg_formatado = fonte.render(mensagem,True,(0,0,0))
+        self.tela.blit(msg_formatado,(400,300))
+    
     def start_round(self):
 
         self.tela.fill(Game.WHITE)
@@ -59,7 +71,11 @@ class Game:
         Game.rodada += 1
         pygame.time.delay(random.randint(1000, 3000))
         quadrado = self.gera_quadrado_random()
-        pygame.draw.rect(self.tela, quadrado.cor, (quadrado.pos_x, quadrado.pos_y, quadrado.largura_objeto,quadrado.altura_objeto))
+        pygame.draw.rect(self.tela, 
+                         quadrado.cor,
+                        (quadrado.pos_x, quadrado.pos_y, quadrado.largura_objeto,quadrado.altura_objeto)
+                        )
+        
         pygame.display.update()
 
         start_time = time.time()
@@ -110,6 +126,9 @@ class Game:
                     self.start_round()
                     print(f"acertos: {self.hits}  erros: {self.miss}\nTempo Reacao:{self.reaction_time }")
 
+                self.tela.fill(Game.WHITE)
+                self.end_game()
+                pygame.display.update()
 
 
 
