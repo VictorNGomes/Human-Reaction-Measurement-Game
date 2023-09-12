@@ -21,16 +21,17 @@ class Game:
     RED = (255, 0, 0)
     GREEN = (0, 255, 0)
     BLUE = (0, 0, 255)
+    YELLOW = (255,255,0)
 
     N_RODADAS = 10
     
     rodada = 0
-    cores = [RED,GREEN,BLUE]
+    cores = [RED,GREEN,BLUE,YELLOW]
 
     tempos_reacao =[]
 
 
-    def __init__(self,largura=800,altura=600,name ="Jogo de Reação" ) -> None:
+    def __init__(self,largura=1024,altura=768,name ="Jogo de Reação" ) -> None:
 
         self.largura  = largura
         self.altura = altura
@@ -57,9 +58,9 @@ class Game:
         pass
 
     def tela_end_game(self):
-        fonte = pygame.font.SysFont('arial',10,True)
+        fonte = pygame.font.SysFont('arial',18,True)
 
-        mensagem1 = f"Acertos: {self.hits}\nErro:{self.miss}\nTempo médio de reação : {len(self.reaction_times)/sum(self.reaction_times)}"
+        mensagem1 = f"Acertos: {self.hits} Erro:{self.miss} Tempo médio de reação : {len(self.reaction_times)/sum(self.reaction_times)}"
         msg_formatado = fonte.render(mensagem1,True,(0,0,0))
         self.tela.blit(msg_formatado,((self.largura//2) - 150, 150))
 
@@ -95,7 +96,7 @@ class Game:
                     self.reaction_time = end_time - start_time
 
                     if quadrado.cor == Game.RED:
-                        if event.key == pygame.K_r:
+                        if event.key == pygame.K_LEFT:
                             self.hits += 1
                         else:
                             self.miss +=1     
@@ -103,7 +104,7 @@ class Game:
                         return
                     
                     if quadrado.cor == Game.GREEN:
-                        if event.key == pygame.K_g:
+                        if event.key == pygame.K_UP:
                             self.hits += 1
                         else:
                             self.miss +=1     
@@ -111,12 +112,21 @@ class Game:
                         return
                     
                     if quadrado.cor == Game.BLUE:
-                        if event.key == pygame.K_b:
+                        if event.key == pygame.K_RIGHT:
                             self.hits += 1
                         else:
                             self.miss +=1     
                         self.reaction_times.append(self.reaction_time)
                         return
+                    
+                    if quadrado.cor == Game.YELLOW:
+                        if event.key == pygame.K_DOWN:
+                            self.hits += 1
+                        else:
+                            self.miss +=1     
+                        self.reaction_times.append(self.reaction_time)
+                        return                   
+                    
                    
 
 
@@ -134,10 +144,10 @@ class Game:
                 if Game.rodada < Game.N_RODADAS:
                     self.start_round()
                     print(f"acertos: {self.hits}  erros: {self.miss}\nTempo Reacao:{self.reaction_time }")
-
-                self.tela.fill(Game.WHITE)
-                self.tela_end_game()
-                pygame.display.update()
+                else:
+                    self.tela.fill(Game.WHITE)
+                    self.tela_end_game()
+                    pygame.display.update()
 
 
 
