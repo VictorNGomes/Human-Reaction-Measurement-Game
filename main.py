@@ -64,12 +64,28 @@ class Game:
         msg_formatado = fonte.render(mensagem1,True,(0,0,0))
         self.tela.blit(msg_formatado,((self.largura//2) - 150, 150))
 
-        y_offset = 12
+        y_offset = 15
         
         for i, reaction_time in enumerate(self.reaction_times):
             texto_tempo = fonte.render(f"Rodada {i + 1}: {reaction_time:.2f} ms", True, (0, 0, 0))
             self.tela.blit(texto_tempo, (self.largura // 2 - 150, self.altura // 4 + y_offset))
-            y_offset += 12
+            y_offset += 15
+    
+    def tela_inicial(self):
+        
+        contagem = 3
+        while contagem != -1:
+            self.tela.fill(Game.WHITE)
+            pygame.display.update()
+            msg = f'Incia em {contagem}'
+            fonte = pygame.font.SysFont('arial',25,True)
+            msg_formatado = fonte.render(msg,True,(0,0,0))
+            self.tela.blit(msg_formatado,((self.largura//2) - 200, self.altura//2))
+            pygame.display.update()
+            pygame.time.delay(2000)
+
+            contagem-=1
+
 
 
     
@@ -96,7 +112,7 @@ class Game:
                     self.reaction_time = end_time - start_time
 
                     if quadrado.cor == Game.RED:
-                        if event.key == pygame.K_LEFT:
+                        if event.key == pygame.K_RIGHT:
                             self.hits += 1
                         else:
                             self.miss +=1     
@@ -112,7 +128,7 @@ class Game:
                         return
                     
                     if quadrado.cor == Game.BLUE:
-                        if event.key == pygame.K_RIGHT:
+                        if event.key == pygame.K_LEFT:
                             self.hits += 1
                         else:
                             self.miss +=1     
@@ -126,7 +142,9 @@ class Game:
                             self.miss +=1     
                         self.reaction_times.append(self.reaction_time)
                         return                   
-                    
+                if event.type == pygame.QUIT:
+                    return
+
                    
 
 
@@ -134,13 +152,12 @@ class Game:
     
     def run(self):
         
-
+        self.tela_inicial()
         while True:
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
-
+                    sys.exit() 
                 if Game.rodada < Game.N_RODADAS:
                     self.start_round()
                     print(f"acertos: {self.hits}  erros: {self.miss}\nTempo Reacao:{self.reaction_time }")
